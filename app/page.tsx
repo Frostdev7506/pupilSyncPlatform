@@ -174,14 +174,14 @@ export default function HomePage() {
             </div>
             <motion.div
               variants={itemVariants}
-              className="flex-1"
+              className="flex-1 w-full"
             >
               <Image
                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800"
                 alt="Learning Platform"
-                width={800}
+                width={1000}
                 height={600}
-                className="rounded-lg shadow-2xl"
+                className="home_image rounded-lg shadow-2xl"
                 priority
               />
             </motion.div>

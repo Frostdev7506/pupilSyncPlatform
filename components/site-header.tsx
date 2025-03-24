@@ -24,7 +24,7 @@ export function SiteHeader() {
       animate={{ y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="container flex h-16 items-center">
+      <div className="navbar container flex h-16 items-center">
         <MobileNav />
         <div className="flex items-center space-x-8">
           <Link href="/" className="font-bold text-xl hover:text-primary transition-colors">
@@ -38,7 +38,7 @@ export function SiteHeader() {
           <nav className="flex items-center space-x-2">
             <ThemeToggle />
             <Button variant="ghost" className="hidden lg:flex">
-              Login
+              <Link href="/login">Login</Link>
             </Button>
             <Button className="hidden lg:flex">Sign Up</Button>
             <DropdownMenu>

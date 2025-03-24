@@ -97,7 +97,7 @@ export default function SignUpPage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-md"
+        className="w-full md:max-w-md sm:max-w-sm xs:max-w-xs"
       >
         <Card className="border-2">
           <CardHeader className="space-y-1">
