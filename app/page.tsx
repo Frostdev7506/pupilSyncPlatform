@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
+import { Statistics } from "@/components/statistics";
+import { HeroCarousel } from "@/components/hero-carousel";
 import {
   BookOpen,
   CheckCircle,
@@ -147,48 +149,48 @@ export default function HomePage() {
             className="flex flex-col lg:flex-row items-center gap-12"
           >
             <div className="flex-1 text-center lg:text-left p-5">
-              <motion.h1 
-                variants={itemVariants}
-                className="text-4xl md:text-6xl font-bold leading-tight"
-              >
-                Transform Your Learning Experience
-              </motion.h1>
-              <motion.p 
-                variants={itemVariants}
-                className="mt-6 text-xl text-muted-foreground"
-              >
-                Empower your educational journey with our comprehensive learning
-                management system. Built for students, teachers, and institutions.
-              </motion.p>
               <motion.div 
                 variants={itemVariants}
-                className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                className="relative z-10"
               >
-                <Button size="lg" className="bg-primary text-primary-foreground">
-                  Get Started Free
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-                <Button size="lg" variant="outline">
-                  Book a Demo
-                </Button>
+                <Badge className="mb-4 p-1.5">Learning Management System</Badge>
+                <h1 className="text-4xl md:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
+                  Transform Your Learning Experience
+                </h1>
+                <p className="mt-6 text-xl text-muted-foreground">
+                  Empower your educational journey with our comprehensive learning
+                  management system. Built for students, teachers, and institutions.
+                </p>
+                <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <Button 
+                    size="lg" 
+                    className="bg-primary text-primary-foreground"
+                  >
+                    Get Started Free
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="border-primary/20 hover:border-primary/40"
+                  >
+                    Book a Demo
+                  </Button>
+                </div>
               </motion.div>
             </div>
             <motion.div
               variants={itemVariants}
               className="flex-1 w-full"
             >
-              <Image
-                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800"
-                alt="Learning Platform"
-                width={1000}
-                height={600}
-                className="home_image rounded-lg shadow-2xl"
-                priority
-              />
+              <HeroCarousel className="shadow-2xl" />
             </motion.div>
           </motion.div>
         </div>
       </section>
+
+      {/* Statistics Section */}
+      <Statistics />
 
       {/* Students Section */}
       <section className="py-20 bg-muted/50">
