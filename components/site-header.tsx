@@ -26,16 +26,16 @@ export function SiteHeader() {
     >
       <div className="navbar container flex h-16 items-center">
         <MobileNav />
-        <div className="flex items-center space-x-8">
-          <Link href="/" className="font-bold text-xl hover:text-primary transition-colors">
-            Pupilsync
+        <div className="flex items-center space-x-8 ">
+          <Link href="/" className="font-bold text-xl hover:text-primary transition-colors pl-8">
+            PupilSync
           </Link>
           <div className="hidden lg:flex">
             <MainNav />
           </div>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-2">
+          <nav className="flex items-center space-x-2 pr-4">
             <ThemeToggle />
             <Button variant="ghost" className="hidden lg:flex">
               <Link href="/login">Login</Link>
