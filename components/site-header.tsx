@@ -26,16 +26,19 @@ export function SiteHeader() {
     >
       <div className="container flex h-16 items-center xl:w-[98%] lg:w-[98%] md:w-[97%] sm:w-[97%] max-sm:w-[93%]">
         <MobileNav />
-        <div className="flex items-center space-x-8">
-          <Link href="/" className="font-bold text-xl hover:text-primary transition-colors">
-            EduLMS
+        <div className="flex items-center space-x-8 ">
+
+          <Link href="/" className="font-bold text-xl hover:text-primary 
+          bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent
+          transition-colors pl-8">
+            PupilSync
           </Link>
           <div className="hidden lg:flex">
             <MainNav />
           </div>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-2">
+          <nav className="flex items-center space-x-2 pr-4">
             <ThemeToggle />
             <Button variant="ghost" className="hidden lg:flex">
               <Link href="/login">Login</Link>
