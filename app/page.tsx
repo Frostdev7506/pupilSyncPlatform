@@ -31,6 +31,11 @@ import {
   Smartphone,
   Star,
 } from "lucide-react";
+import { StudentSection } from "@/components/sections/student-section";
+import { TeacherSection } from "@/components/sections/teacher-section";
+import { InstitutionSection } from "@/components/sections/institution-section";
+import { TestimonialSection } from "@/components/sections/testimonial-section";
+import { ChatModal } from "@/components/chat-modal";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -50,7 +55,8 @@ const itemVariants = {
   },
 };
 
-const features = {
+const 
+features = {
   students: [
     {
       icon: BookOpen,
@@ -137,6 +143,8 @@ const testimonials = [
 ];
 
 export default function HomePage() {
+  const [isChatOpen, setIsChatOpen] = React.useState(false);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -191,227 +199,28 @@ export default function HomePage() {
 
       {/* Statistics Section */}
       <Statistics />
+      <TestimonialSection />
 
-      {/* Students Section */}
-      <section className="py-20 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <Badge className="mb-4">For Students</Badge>
-            <h2 className="text-3xl font-bold mb-4">
-              Enhance Your Learning Journey
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Access world-class education tools and resources designed to help you succeed.
-            </p>
-          </motion.div>
+      {/* Feature Sections */}
+      <StudentSection />
+      <TeacherSection />
+      <InstitutionSection />
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-          >
-            {features.students.map((feature) => (
-              <motion.div
-                key={feature.title}
-                variants={itemVariants}
-                className="group"
-              >
-                <Card className="p-6 h-full transition-all duration-300 hover:shadow-lg">
-                  <feature.icon className="h-12 w-12 text-primary mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            variants={itemVariants}
-            className="text-center mt-12"
-          >
-            <Button size="lg">
-              Start Learning
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Teachers Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <Badge className="mb-4">For Teachers</Badge>
-            <h2 className="text-3xl font-bold mb-4">
-              Powerful Tools for Educators
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Create engaging courses and track student progress with our comprehensive toolkit.
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-          >
-            {features.teachers.map((feature) => (
-              <motion.div
-                key={feature.title}
-                variants={itemVariants}
-                className="group"
-              >
-                <Card className="p-6 h-full transition-all duration-300 hover:shadow-lg">
-                  <feature.icon className="h-12 w-12 text-primary mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            variants={itemVariants}
-            className="text-center mt-12"
-          >
-            <Button size="lg">
-              Start Teaching
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Institutions Section */}
-      <section className="py-20 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <Badge className="mb-4">For Institutions</Badge>
-            <h2 className="text-3xl font-bold mb-4">
-              Enterprise-Grade Solutions
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Scale your educational programs with our secure and flexible platform.
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-          >
-            {features.institutions.map((feature) => (
-              <motion.div
-                key={feature.title}
-                variants={itemVariants}
-                className="group"
-              >
-                <Card className="p-6 h-full transition-all duration-300 hover:shadow-lg">
-                  <feature.icon className="h-12 w-12 text-primary mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            variants={itemVariants}
-            className="text-center mt-12"
-          >
-            <Button size="lg">
-              Contact Sales
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold mb-4">
-              Trusted by Leading Institutions
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              See what our users have to say about their experience with Pupil Sync.
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
-          >
-            {testimonials.map((testimonial) => (
-              <motion.div
-                key={testimonial.author}
-                variants={itemVariants}
-              >
-                <Card className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.author}
-                      width={50}
-                      height={50}
-                      className="rounded-full"
-                    />
-                    <div>
-                      <p className="font-semibold">{testimonial.author}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {testimonial.role} at {testimonial.school}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="italic">{testimonial.quote}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Floating Contact Button */}
+      {/* Chat Button and Modal */}
       <div className="fixed bottom-8 right-8 z-50">
-        <Button size="lg" className="rounded-full shadow-lg">
+        <Button 
+          size="lg" 
+          className="rounded-full shadow-lg"
+          onClick={() => setIsChatOpen(true)}
+        >
           <MessageCircle className="h-5 w-5 mr-2" />
-          Chat with us
+          Chat with AI
         </Button>
       </div>
+      <ChatModal 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+      />
       <Footer />
     </div>
   );
