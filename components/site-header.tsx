@@ -28,7 +28,7 @@ export function SiteHeader() {
         <MobileNav />
         <div className="flex items-center space-x-8">
           <Link href="/" className="font-bold text-xl hover:text-primary transition-colors">
-            EduLMS
+            Pupilsync
           </Link>
           <div className="hidden lg:flex">
             <MainNav />
