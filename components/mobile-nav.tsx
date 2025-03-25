@@ -30,7 +30,7 @@ export function MobileNav() {
               className="font-bold text-xl mb-4 hover:text-primary transition-colors"
               onClick={() => setOpen(false)}
             >
-              EduLMS
+              Pupilsync
             </Link>
             <MobileLink href="/platform" onOpenChange={setOpen}>
               Platform
