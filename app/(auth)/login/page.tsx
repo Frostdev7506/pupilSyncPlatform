@@ -83,7 +83,7 @@ export default function LoginPage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full md:max-w-md sm:max-w-sm xs:max-w-xs"
+        className="w-full md:max-w-md sm:max-w-sm max-sm:max-w-[92%]"
       >
         <Card>
           <CardHeader>

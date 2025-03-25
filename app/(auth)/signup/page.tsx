@@ -92,12 +92,12 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="container flex items-center justify-center min-h-[calc(100vh-4rem)] py-10">
+    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-10">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full md:max-w-md sm:max-w-sm xs:max-w-xs"
+        className="w-full md:max-w-md sm:max-w-sm max-sm:max-w-[92%]"
       >
         <Card className="border-2">
           <CardHeader className="space-y-1">

@@ -24,7 +24,7 @@ export function SiteHeader() {
       animate={{ y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="navbar container flex h-16 items-center">
+      <div className="container flex h-16 items-center xl:w-[98%] lg:w-[98%] md:w-[97%] sm:w-[97%] max-sm:w-[93%]">
         <MobileNav />
         <div className="flex items-center space-x-8 ">
 
