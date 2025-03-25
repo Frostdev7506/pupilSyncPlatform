@@ -43,7 +43,9 @@ export function SiteHeader() {
             <Button variant="ghost" className="hidden lg:flex">
               <Link href="/login">Login</Link>
             </Button>
-            <Button className="hidden lg:flex">Sign Up</Button>
+            <Button className="hidden lg:flex">
+              <Link href="/signup">Sign Up</Link>
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
