@@ -156,14 +156,6 @@ export default function HomePage() {
               className="flex-1 w-full max-w-2xl"
               whileHover={{ scale: 1.01 }}
             >
-              <Image
-                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800"
-                alt="Learning Platform"
-                width={1000}
-                height={600}
-                className="home_image rounded-lg shadow-2xl"
-                priority
-              />
               <HeroCarousel className="rounded-2xl shadow-2xl border border-border/30" />
             </motion.div>
           </motion.div>
