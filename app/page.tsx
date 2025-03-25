@@ -179,9 +179,9 @@ export default function HomePage() {
               <Image
                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800"
                 alt="Learning Platform"
-                width={1000}
+                width={800}
                 height={600}
-                className="home_image rounded-lg shadow-2xl"
+                className="w-full rounded-lg shadow-2xl"
                 priority
               />
             </motion.div>
