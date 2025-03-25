@@ -87,7 +87,11 @@ export default function LoginPage() {
       >
         <Card>
           <CardHeader>
-            <CardTitle>Welcome back</CardTitle>
+            <CardTitle>
+             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Welcome back
+              </span>
+            </CardTitle>
             <CardDescription>
               Sign in to your account to continue
             </CardDescription>

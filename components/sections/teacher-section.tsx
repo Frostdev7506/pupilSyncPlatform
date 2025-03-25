@@ -109,7 +109,7 @@ export function TeacherSection() {
           
           <motion.h2 
             variants={titleVariants}
-            className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-rose-500 to-amber-500 leading-tight"
+            className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-rose-500 to-amber-500 leading-tight md:h-[102px]"
           >
             Empower Your <br className="hidden sm:block"/> Teaching Experience
           </motion.h2>

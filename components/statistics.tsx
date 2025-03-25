@@ -136,7 +136,7 @@ export function Statistics() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500 2xl:h-[54px]">
             Trusted by Educators Worldwide
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
