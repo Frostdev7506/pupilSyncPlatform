@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Footer } from "@/components/footer";
 import {
   BookOpen,
   CheckCircle,
@@ -145,7 +146,7 @@ export default function HomePage() {
             animate="visible"
             className="flex flex-col lg:flex-row items-center gap-12"
           >
-            <div className="flex-1 text-center lg:text-left">
+            <div className="flex-1 text-center lg:text-left p-5">
               <motion.h1 
                 variants={itemVariants}
                 className="text-4xl md:text-6xl font-bold leading-tight"
@@ -409,6 +410,7 @@ export default function HomePage() {
           Chat with us
         </Button>
       </div>
+      <Footer />
     </div>
   );
 }
