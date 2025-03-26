@@ -100,7 +100,7 @@ export default function HomePage() {
                 >
                   Learning Reimagined
                 </Badge>
-                <h1 className="text-5xl md:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+                <h1 className="text-5xl md:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 2xl:h-[126px]">
                   Transform Your <br className="hidden lg:block" />Learning Experience
                 </h1>
                 <motion.p 

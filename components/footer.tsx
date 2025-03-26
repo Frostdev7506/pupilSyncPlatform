@@ -61,7 +61,7 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-background border-t border-border/50">
+    <footer className="flex justify-center bg-background border-t border-border/50">
       <div className="container px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Company Info */}

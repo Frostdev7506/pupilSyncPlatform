@@ -60,7 +60,7 @@ export function TestimonialSection() {
           className="text-center mb-16"
         >
           <Badge variant="secondary" className="mb-4">Testimonials</Badge>
-          <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
+          <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80 sm:h-[43px]">
             Trusted by Leading Institutions
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

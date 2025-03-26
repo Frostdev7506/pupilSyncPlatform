@@ -100,7 +100,7 @@ export function StudentSection() {
           
           <motion.h2 
             variants={titleVariants}
-            className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 leading-tight"
+            className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 leading-tight md:h-[104px]"
           >
             Transform Your <br className="hidden sm:block"/> Learning Experience
           </motion.h2>

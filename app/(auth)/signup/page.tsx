@@ -101,7 +101,11 @@ export default function SignUpPage() {
       >
         <Card className="border-2">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Create an account
+             </span>
+            </CardTitle>
             <CardDescription>
               Enter your details below to create your account
             </CardDescription>
