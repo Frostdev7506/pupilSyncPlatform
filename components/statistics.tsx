@@ -121,7 +121,7 @@ const textVariants = {
 
 export function Statistics() {
   return (
-    <section className="py-24 bg-gradient-to-b from-background to-muted/30 relative overflow-hidden">
+    <section className="flex justify-center py-24 bg-gradient-to-b from-background to-muted/30 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-blue-500/5 blur-3xl"></div>
