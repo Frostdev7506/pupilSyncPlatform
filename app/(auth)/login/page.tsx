@@ -18,7 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Github, Mail } from "lucide-react";
+import { Github, Mail, Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -35,8 +36,8 @@ const containerVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.4,
-      staggerChildren: 0.1,
+      duration: 0.2,
+      staggerChildren: 0.05,
     },
   },
 };
@@ -46,11 +47,16 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
+    transition: {
+      duration: 0.2,
+    },
   },
 };
 
 export default function LoginPage() {
   const { toast } = useToast();
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,8 +68,10 @@ export default function LoginPage() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setIsLoading(true);
       // Implement your login logic here
       console.log(values);
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
       toast({
         title: "Success",
         description: "You have successfully logged in.",
@@ -74,37 +82,40 @@ export default function LoginPage() {
         description: "Something went wrong. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-10">
+    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-1 md:py-10 bg-gradient-to-b from-background to-muted/20">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full md:max-w-md sm:max-w-sm max-sm:max-w-[92%]"
+        className="w-full min-w-[320px] md:min-w-[400px] md:max-w-md sm:max-w-sm max-sm:max-w-[92%]"
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>
-             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Welcome back
+        <Card className="border-2 shadow-lg">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-3xl font-bold text-center">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Welcome Back
               </span>
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-center">
               Sign in to your account to continue
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <motion.div variants={itemVariants}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <motion.div variants={itemVariants} className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="Enter your email"
                   {...form.register("email")}
+                  className={form.formState.errors.email ? "border-red-500" : ""}
                 />
                 {form.formState.errors.email && (
                   <p className="text-sm text-red-500 mt-1">
@@ -113,14 +124,24 @@ export default function LoginPage() {
                 )}
               </motion.div>
               
-              <motion.div variants={itemVariants}>
+              <motion.div variants={itemVariants} className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  {...form.register("password")}
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    {...form.register("password")}
+                    className={form.formState.errors.password ? "border-red-500" : ""}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
                 {form.formState.errors.password && (
                   <p className="text-sm text-red-500 mt-1">
                     {form.formState.errors.password.message}
@@ -128,17 +149,30 @@ export default function LoginPage() {
                 )}
               </motion.div>
 
-              <motion.div variants={itemVariants} className="flex items-center space-x-2">
-                <Checkbox
-                  id="rememberMe"
-                  {...form.register("rememberMe")}
-                />
-                <Label htmlFor="rememberMe">Remember me</Label>
+              <motion.div variants={itemVariants} className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="rememberMe"
+                    {...form.register("rememberMe")}
+                  />
+                  <Label htmlFor="rememberMe">Remember me</Label>
+                </div>
+                <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+                  Forgot password?
+                </Link>
               </motion.div>
 
               <motion.div variants={itemVariants}>
-                <Button type="submit" className="w-full">
-                  Sign In
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <div className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Signing in...
+                    </div>
+                  ) : "Sign In"}
                 </Button>
               </motion.div>
             </form>
@@ -156,26 +190,26 @@ export default function LoginPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <motion.div variants={itemVariants}>
-                <Button variant="outline" className="w-full">
-                  <Github className="mr-2 h-4 w-4" />
-                  Github
+                <Button variant="outline" className="w-full gap-2">
+                  <Github className="h-4 w-4" />
+                  GitHub
                 </Button>
               </motion.div>
               <motion.div variants={itemVariants}>
-                <Button variant="outline" className="w-full">
-                  <Mail className="mr-2 h-4 w-4" />
+                <Button variant="outline" className="w-full gap-2">
+                  <Mail className="h-4 w-4" />
                   Google
                 </Button>
               </motion.div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-center">
-            <motion.p variants={itemVariants} className="text-sm text-muted-foreground">
+          <CardFooter className="flex flex-col space-y-4">
+            <div className="text-sm text-center">
               Don&apos;t have an account?{" "}
-              <a href="/signup" className="text-primary hover:underline">
+              <Link href="/signup" className="text-primary hover:underline font-medium">
                 Sign up
-              </a>
-            </motion.p>
+              </Link>
+            </div>
           </CardFooter>
         </Card>
       </motion.div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MainNav } from "@/components/main-nav";
@@ -15,8 +16,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from 'next/navigation';
 
 export function SiteHeader() {
+  const router = useRouter();
+
+  React.useEffect(() => {
+    // Prefetch auth pages
+    router.prefetch('/login');
+    router.prefetch('/signup');
+  }, [router]);
+
   return (
     <motion.header
       className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex justify-center"
@@ -41,10 +51,10 @@ export function SiteHeader() {
           <nav className="flex items-center space-x-2 pr-4">
             <ThemeToggle />
             <Button variant="ghost" className="hidden lg:flex">
-              <Link href="/login">Login</Link>
+              <Link href="/login" prefetch={true}>Login</Link>
             </Button>
             <Button className="hidden lg:flex">
-              <Link href="/signup">Sign Up</Link>
+              <Link href="/signup" prefetch={true}>Sign Up</Link>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
