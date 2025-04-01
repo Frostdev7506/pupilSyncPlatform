@@ -132,7 +132,7 @@ export default function PricingPage() {
       >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Simple, transparent pricing</h1>
+          <h1 className="text-6xl font-bold mb-4">Simple, transparent pricing</h1>
           <p className="text-xl text-muted-foreground mb-8">
             Choose the perfect plan for your needs
           </p>
