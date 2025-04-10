@@ -38,7 +38,7 @@ export function MobileNav() {
             <MobileLink href="/resources" onOpenChange={setOpen}>
               Resources
             </MobileLink>
-            <MobileLink href="/pricing" onOpenChange={setOpen}>
+            <MobileLink href="/pricing/students" onOpenChange={setOpen}>
               Pricing
             </MobileLink>
             <MobileLink href="/login" onOpenChange={setOpen}>
