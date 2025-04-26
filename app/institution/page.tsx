@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -58,7 +59,7 @@ export default function InstitutionPage() {
           <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-blue-500/5 blur-3xl"></div>
           <div className="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full bg-purple-500/5 blur-3xl"></div>
         </div>
-        
+
         <div className="container mx-auto px-4 relative">
           <motion.div
             variants={containerVariants}
@@ -67,12 +68,12 @@ export default function InstitutionPage() {
             className="flex flex-col lg:flex-row items-center gap-16"
           >
             <div className="flex-1 text-center lg:text-left">
-              <motion.div 
+              <motion.div
                 variants={itemVariants}
                 className="relative z-10 space-y-6"
               >
-                <Badge 
-                  variant="secondary" 
+                <Badge
+                  variant="secondary"
                   className="mb-4 px-4 py-1.5 text-sm font-medium bg-background border border-border/50 hover:bg-primary/5 transition-colors"
                 >
                   Institutional Excellence
@@ -80,7 +81,7 @@ export default function InstitutionPage() {
                 <h1 className="text-5xl md:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 2xl:h-[126px]">
                   Transform Your <br className="hidden lg:block" />Educational Institution
                 </h1>
-                <motion.p 
+                <motion.p
                   variants={fadeIn}
                   className="mt-6 text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0"
                 >
@@ -88,8 +89,8 @@ export default function InstitutionPage() {
                 </motion.p>
                 <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                   <motion.div variants={itemVariants}>
-                    <Button 
-                      size="lg" 
+                    <Button
+                      size="lg"
                       className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-blue-500/20 px-8 py-6 text-base"
                     >
                       Schedule Demo
@@ -97,8 +98,8 @@ export default function InstitutionPage() {
                     </Button>
                   </motion.div>
                   <motion.div variants={itemVariants}>
-                    <Button 
-                      size="lg" 
+                    <Button
+                      size="lg"
                       variant="outline"
                       className="border-2 border-primary/20 bg-background/80 hover:bg-primary/5 hover:border-primary/40 px-8 py-6 text-base shadow-sm hover:shadow-md"
                     >
@@ -107,9 +108,23 @@ export default function InstitutionPage() {
                       </span>
                     </Button>
                   </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="border-2 border-primary/20 bg-background/80 hover:bg-primary/5 hover:border-primary/40 px-8 py-6 text-base shadow-sm hover:shadow-md"
+                      asChild
+                    >
+                      <Link href="/institution/dashboard">
+                        <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                          Access Dashboard
+                        </span>
+                      </Link>
+                    </Button>
+                  </motion.div>
                 </div>
-                
-                <motion.div 
+
+                <motion.div
                   variants={fadeIn}
                   className="mt-12 flex flex-wrap justify-center lg:justify-start gap-6"
                 >
@@ -140,10 +155,10 @@ export default function InstitutionPage() {
       </section>
 
     <PlatformImpactStats />
-      
+
       <TestimonialSection />
       <InstitutionSection />
-    
+
 
       <section className="py-24 bg-gradient-to-b from-muted/20 to-background">
         <div className="container mx-auto px-4 text-center">
@@ -161,15 +176,15 @@ export default function InstitutionPage() {
               Join leading educational institutions revolutionizing education with our platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-blue-500/20 px-8 py-6 text-base"
               >
                 Contact Sales
                 <ChevronRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 variant="outline"
                 className="border-2 border-primary/20 bg-background/80 hover:bg-primary/5 hover:border-primary/40 px-8 py-6 text-base shadow-sm hover:shadow-md"
               >
@@ -182,14 +197,14 @@ export default function InstitutionPage() {
         </div>
       </section>
 
-      <motion.div 
+      <motion.div
         className="fixed bottom-8 right-8 z-50"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 1, type: "spring" }}
       >
-        <Button 
-          size="lg" 
+        <Button
+          size="lg"
           className="rounded-full shadow-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
           onClick={() => setIsChatOpen(true)}
         >
@@ -197,9 +212,9 @@ export default function InstitutionPage() {
           Support Assistant
         </Button>
       </motion.div>
-      <ChatModal 
-        isOpen={isChatOpen} 
-        onClose={() => setIsChatOpen(false)} 
+      <ChatModal
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
       />
       <Footer />
     </div>

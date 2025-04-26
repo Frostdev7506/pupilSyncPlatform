@@ -38,7 +38,7 @@ export function SiteHeader() {
         <MobileNav />
         <div className="flex items-center space-x-8 ">
 
-          <Link href="/" className="font-bold text-xl hover:text-primary 
+          <Link href="/" className="font-bold text-xl hover:text-primary
           bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent
           transition-colors pl-8">
             PupilSync
@@ -81,6 +81,9 @@ export function SiteHeader() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/institution/dashboard">Dashboard</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   Settings

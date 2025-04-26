@@ -14,18 +14,23 @@ import { cn } from "@/lib/utils";
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "For Students",
-    href: "/students",
+    href: "/student",
     description: "Access courses, track progress, and connect with peers.",
   },
   {
     title: "For Teachers",
-    href: "/teachers",
+    href: "/teacher",
     description: "Create courses, manage students, and analyze performance.",
   },
   {
     title: "For Institutions",
-    href: "/institutions",
+    href: "/institution",
     description: "Scale your educational programs with enterprise features.",
+  },
+  {
+    title: "Institution Dashboard",
+    href: "/institution/dashboard",
+    description: "Access your institution's dashboard and analytics.",
   },
 ];
 
