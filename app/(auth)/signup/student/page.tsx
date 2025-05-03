@@ -18,10 +18,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const formSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string()
     .min(8, "Password must be at least 8 characters")
@@ -29,8 +32,8 @@ const formSchema = z.object({
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
   confirmPassword: z.string(),
-  studentId: z.string().min(1, "Student ID is required"),
-  grade: z.string().min(1, "Grade is required"),
+  gradeLevel: z.string().min(1, "Grade is required"),
+  institutionId: z.string().min(1, "Institution ID is required"),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -62,32 +65,59 @@ const itemVariants = {
 export default function StudentSignUpPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState(false);
+  const router = useRouter();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
-      studentId: "",
-      grade: "",
+      gradeLevel: "",
+      institutionId: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      // Implement your signup logic here
-      console.log(values);
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
-      toast({
-        title: "Success",
-        description: "Your account has been created.",
-      });
-    } catch (error) {
+      
+      // Prepare data for API request
+      const studentData = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password,
+        institutionId: parseInt(values.institutionId),
+        gradeLevel: values.gradeLevel
+      };
+      
+      // Make API request to register student
+      const response = await axios.post(
+        'http://localhost:5000/api/v1/auth/register-student', 
+        studentData,
+        { withCredentials: true }
+      );
+      
+      if (response.status === 201) {
+        toast({
+          title: "Success",
+          description: "Your student account has been created successfully.",
+        });
+        
+        // Redirect to login or dashboard
+        // router.push('/login');
+      router.push('/student/dashboard');  
+
+
+      }
+    } catch (error: any) {
+      console.error("Registration error:", error);
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: error.response?.data?.message || "Failed to create account. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -125,21 +155,39 @@ export default function StudentSignUpPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <motion.div variants={itemVariants} className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
-                <Input
-                  id="fullName"
-                  type="text"
-                  placeholder="Enter your full name"
-                  {...form.register("fullName")}
-                  className={form.formState.errors.fullName ? "border-red-500" : ""}
-                />
-                {form.formState.errors.fullName && (
-                  <p className="text-sm text-red-500 mt-1">
-                    {form.formState.errors.fullName.message}
-                  </p>
-                )}
-              </motion.div>
+              <div className="grid grid-cols-2 gap-4">
+                <motion.div variants={itemVariants} className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    type="text"
+                    placeholder="Enter your first name"
+                    {...form.register("firstName")}
+                    className={form.formState.errors.firstName ? "border-red-500" : ""}
+                  />
+                  {form.formState.errors.firstName && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {form.formState.errors.firstName.message}
+                    </p>
+                  )}
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    type="text"
+                    placeholder="Enter your last name"
+                    {...form.register("lastName")}
+                    className={form.formState.errors.lastName ? "border-red-500" : ""}
+                  />
+                  {form.formState.errors.lastName && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {form.formState.errors.lastName.message}
+                    </p>
+                  )}
+                </motion.div>
+              </div>
 
               <motion.div variants={itemVariants} className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -158,33 +206,33 @@ export default function StudentSignUpPage() {
               </motion.div>
 
               <motion.div variants={itemVariants} className="space-y-2">
-                <Label htmlFor="studentId">Student ID</Label>
+                <Label htmlFor="institutionId">Institution ID</Label>
                 <Input
-                  id="studentId"
+                  id="institutionId"
                   type="text"
-                  placeholder="Enter your student ID"
-                  {...form.register("studentId")}
-                  className={form.formState.errors.studentId ? "border-red-500" : ""}
+                  placeholder="Enter your institution ID"
+                  {...form.register("institutionId")}
+                  className={form.formState.errors.institutionId ? "border-red-500" : ""}
                 />
-                {form.formState.errors.studentId && (
+                {form.formState.errors.institutionId && (
                   <p className="text-sm text-red-500 mt-1">
-                    {form.formState.errors.studentId.message}
+                    {form.formState.errors.institutionId.message}
                   </p>
                 )}
               </motion.div>
 
               <motion.div variants={itemVariants} className="space-y-2">
-                <Label htmlFor="grade">Grade/Year</Label>
+                <Label htmlFor="gradeLevel">Grade/Year</Label>
                 <Input
-                  id="grade"
+                  id="gradeLevel"
                   type="text"
                   placeholder="Enter your grade or year"
-                  {...form.register("grade")}
-                  className={form.formState.errors.grade ? "border-red-500" : ""}
+                  {...form.register("gradeLevel")}
+                  className={form.formState.errors.gradeLevel ? "border-red-500" : ""}
                 />
-                {form.formState.errors.grade && (
+                {form.formState.errors.gradeLevel && (
                   <p className="text-sm text-red-500 mt-1">
-                    {form.formState.errors.grade.message}
+                    {form.formState.errors.gradeLevel.message}
                   </p>
                 )}
               </motion.div>
@@ -224,11 +272,8 @@ export default function StudentSignUpPage() {
               <motion.div variants={itemVariants}>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
-                    <div className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Creating account...
                     </div>
                   ) : "Create Account"}

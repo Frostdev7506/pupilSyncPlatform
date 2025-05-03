@@ -29,6 +29,19 @@ export interface InstitutionRegistrationData {
   password: string;
 }
 
+// Add this interface for teacher registration
+export interface TeacherRegistrationData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  subjectExpertise: string;
+  qualification: string;
+  profilePictureUrl?: string;
+  institutions?: number[];
+  primaryInstitutionId?: number | null;
+}
+
 // Create an axios instance (recommended for base URL and default config)
 const apiClient = axios.create({
   baseURL: 'http://localhost:5000/api/v1', // Set the base URL here
@@ -69,6 +82,31 @@ class AuthService {
       }
 
       console.error("Registration Error:", error); // Log the full error for debugging
+      throw new Error(errorMessage);
+    }
+  }
+
+  async registerTeacher(data: TeacherRegistrationData): Promise<AuthResponse> {
+    try {
+      const response = await apiClient.post<AuthResponse>('/auth/register-teacher', data);
+      const result = response.data;
+      this.setToken(result.token);
+      return result;
+    } catch (error) {
+      let errorMessage = 'Failed to register teacher';
+
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ message?: string }>;
+        if (axiosError.response?.data?.message) {
+          errorMessage = axiosError.response.data.message;
+        } else if (axiosError.message) {
+          errorMessage = axiosError.message;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      console.error("Registration Error:", error);
       throw new Error(errorMessage);
     }
   }

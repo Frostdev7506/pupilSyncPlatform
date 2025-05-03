@@ -97,6 +97,8 @@ export default function InstitutionSignUpPage() {
         // Token is automatically stored by authService
         // Redirect to dashboard
         router.push('instituiton/dashboard');
+        // router.push('/login');
+
       } else {
         throw new Error('Invalid response from server');
       }
