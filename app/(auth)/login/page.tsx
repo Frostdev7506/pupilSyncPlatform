@@ -27,6 +27,9 @@ const formSchema = z.object({
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
+  entityType: z.enum(["teacher", "student", "institute"], {
+    required_error: "Please select your role",
+  }),
   rememberMe: z.boolean().default(false),
 });
 
@@ -62,6 +65,7 @@ export default function LoginPage() {
     defaultValues: {
       email: "",
       password: "",
+      entityType: undefined,
       rememberMe: false,
     },
   });
@@ -99,15 +103,36 @@ export default function LoginPage() {
           <CardHeader className="space-y-1">
             <CardTitle className="text-3xl font-bold text-center">
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Welcome Back
+              Sign In
               </span>
             </CardTitle>
             <CardDescription className="text-center">
-              Sign in to your account to continue
+              Please Sign in to your account to continue
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <motion.div variants={itemVariants} className="space-y-2">
+                <Label htmlFor="entityType">I am a</Label>
+                <select
+                  id="entityType"
+                  {...form.register("entityType")}
+                  className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                    form.formState.errors.entityType ? "border-red-500" : ""
+                  }`}
+                >
+                  <option value="">Select your role</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="student">Student</option>
+                  <option value="institute">Institute</option>
+                </select>
+                {form.formState.errors.entityType && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {form.formState.errors.entityType.message}
+                  </p>
+                )}
+              </motion.div>
+              
               <motion.div variants={itemVariants} className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -176,32 +201,6 @@ export default function LoginPage() {
                 </Button>
               </motion.div>
             </form>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-muted" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <motion.div variants={itemVariants}>
-                <Button variant="outline" className="w-full gap-2">
-                  <Github className="h-4 w-4" />
-                  GitHub
-                </Button>
-              </motion.div>
-              <motion.div variants={itemVariants}>
-                <Button variant="outline" className="w-full gap-2">
-                  <Mail className="h-4 w-4" />
-                  Google
-                </Button>
-              </motion.div>
-            </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center">
