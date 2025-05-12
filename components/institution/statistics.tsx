@@ -7,13 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Trophy, Users, CheckSquare, Clock, Award, Star, BarChart3, Zap } from 'lucide-react'; // Added relevant icons
 
 // Animated counter hook (same as before)
-const useCounter = (end, duration = 1500) => {
+const useCounter = (end: number, duration = 1500) => {
   const [count, setCount] = useState(0);
   useEffect(() => {
-    let startTime;
-    let animationFrame;
+    let startTime: number;
+    let animationFrame: number;
     const startValue = 0;
-    const step = (timestamp) => {
+    const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const timeElapsed = timestamp - startTime;
       const progress = Math.min(timeElapsed / duration, 1);
@@ -23,7 +23,7 @@ const useCounter = (end, duration = 1500) => {
       if (progress < 1) {
         animationFrame = requestAnimationFrame(step);
       } else {
-         setCount(end);
+        setCount(end);
       }
     };
     setCount(0);
@@ -32,6 +32,14 @@ const useCounter = (end, duration = 1500) => {
   }, [end, duration]);
   return count;
 };
+
+// Formatters for display (Keep these OUTSIDE the component function)
+const formatRating = (rawCount: number) => {
+  // Displays rating as N.N / 5
+  return (rawCount / 10).toFixed(1);
+};
+const formatPercentage = (count: number) => `${count}%`;
+
 
 // Renamed component for institutional context
 export function PlatformImpactStats() {
@@ -66,43 +74,41 @@ export function PlatformImpactStats() {
 
   // Animation for progress bars
   useEffect(() => {
-     setProgressValues({
-       passRate: 0, engagement: 0, completion: 0,
-       timeSaved: 0, satisfaction: 0, easeOfUse: 0
-     });
+    // Reset progress to 0 to re-trigger animation on tab change
+    setProgressValues({
+      passRate: 0, engagement: 0, completion: 0,
+      timeSaved: 0, satisfaction: 0, easeOfUse: 0
+    });
 
+    // Use a small delay to allow the UI to render the 0 state before animating
     const timer = setTimeout(() => {
       setProgressValues({
         passRate: targetValues.passRate,
         engagement: targetValues.engagement,
         completion: targetValues.completion,
         timeSaved: targetValues.timeSaved,
-        satisfaction: (targetValues.satisfaction / 50) * 100, // Convert 4.8/5 to percentage for progress bar (96%)
-        easeOfUse: (targetValues.easeOfUse / 50) * 100 // Convert 4.7/5 to percentage (94%)
+        // Convert 0-50 raw rating to 0-100 percentage for progress bar
+        satisfaction: (targetValues.satisfaction / 50) * 100,
+        easeOfUse: (targetValues.easeOfUse / 50) * 100
       });
-    }, 150);
+    }, 50); // Reduced delay slightly
 
     return () => clearTimeout(timer);
-  }, [activeTab]);
+    // Added activeTab to dependencies so progress animates on tab change
+  }, [activeTab, targetValues.passRate, targetValues.engagement, targetValues.completion, targetValues.timeSaved, targetValues.satisfaction, targetValues.easeOfUse]);
 
 
   // Use the counter hook for animated numbers
-  const passRateCount = useCounter(activeTab ? targetValues.passRate : 0);
-  const engagementCount = useCounter(activeTab ? targetValues.engagement : 0);
-  const completionCount = useCounter(activeTab ? targetValues.completion : 0);
-  const timeSavedCount = useCounter(activeTab ? targetValues.timeSaved : 0);
-  const satisfactionRawCount = useCounter(activeTab ? targetValues.satisfaction : 0);
-  const easeOfUseRawCount = useCounter(activeTab ? targetValues.easeOfUse : 0);
-
-  // Formatters for display
-  const formatRating = (rawCount) => {
-    // Displays rating as N.N / 5
-    return (rawCount / 10).toFixed(1);
-  }
-  const formatPercentage = (count) => `${count}%`;
+  // Added activeTab as a dependency to reset counters on tab change
+  const passRateCount = useCounter(activeTab === "outcomes" ? targetValues.passRate : 0);
+  const engagementCount = useCounter(activeTab === "outcomes" ? targetValues.engagement : 0);
+  const completionCount = useCounter(activeTab === "outcomes" ? targetValues.completion : 0);
+  const timeSavedCount = useCounter(activeTab === "efficiency" ? targetValues.timeSaved : 0);
+  const satisfactionRawCount = useCounter(activeTab === "efficiency" ? targetValues.satisfaction : 0);
+  const easeOfUseRawCount = useCounter(activeTab === "efficiency" ? targetValues.easeOfUse : 0);
 
 
-  // CSS Class Variables (kept gradient as requested)
+  // CSS Class Variables
   const cardBaseClasses = "overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1";
   const gradientBackground = "bg-gradient-to-r from-blue-600 to-purple-600 text-white";
   const iconContainerClasses = "pt-6 pb-4 flex items-center justify-center";
@@ -117,10 +123,10 @@ export function PlatformImpactStats() {
   return (
     <div className="w-full py-12 md:py-16 bg-background">
       {/* Optional: Title reflecting institutional value */}
-       <h2 className="text-3xl font-bold text-center mb-4 text-foreground">Measurable Institutional Impact</h2>
-       <p className="text-lg text-muted-foreground text-center max-w-2xl mx-auto mb-10">
-         See how our LMS enhances student outcomes and empowers educators.
-       </p>
+      <h2 className="text-3xl font-bold text-center mb-4 text-foreground">Measurable Institutional Impact</h2>
+      <p className="text-lg text-muted-foreground text-center max-w-2xl mx-auto mb-10">
+        See how our LMS enhances student outcomes and empowers educators.
+      </p>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-6xl mx-auto">
         {/* Updated Tab Names */}
@@ -130,7 +136,9 @@ export function PlatformImpactStats() {
         </TabsList>
 
         {/* Outcomes Tab Content */}
-        <TabsContent value="outcomes" className="space-y-6 md:space-y-0">
+        {/* Use motion.div if you want tab content to animate (requires wrapping each TabsContent) */}
+        {/* Or use CSS transitions on the content if preferred */}
+        <TabsContent value="outcomes" className="space-y-6 md:space-y-0 data-[state=inactive]:hidden"> {/* Add data-[state=inactive]:hidden */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1: Improved Pass Rate */}
             <Card className={`${cardBaseClasses} ${gradientBackground}`}>
@@ -139,10 +147,11 @@ export function PlatformImpactStats() {
                   <Trophy className={iconClasses} />
                 </div>
                 <div className={contentClasses}>
+                  {/* Use the formatter */}
                   <div className={numberClasses}>{formatPercentage(passRateCount)}</div>
                   <div className={labelClasses}>Improved Pass Rate</div>
                   <Progress
-                    value={progressValues.passRate}
+                    value={progressValues.passRate || 0}
                     className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -157,10 +166,11 @@ export function PlatformImpactStats() {
                   <BarChart3 className={iconClasses} />
                 </div>
                 <div className={contentClasses}>
+                   {/* Use the formatter */}
                   <div className={numberClasses}>{formatPercentage(engagementCount)}</div>
                   <div className={labelClasses}>Student Engagement</div>
                   <Progress
-                     value={progressValues.engagement}
+                     value={progressValues.engagement || 0}
                      className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -175,10 +185,11 @@ export function PlatformImpactStats() {
                   <CheckSquare className={iconClasses} />
                 </div>
                 <div className={contentClasses}>
+                   {/* Use the formatter */}
                   <div className={numberClasses}>{formatPercentage(completionCount)}</div>
                   <div className={labelClasses}>Course Completion Rate</div>
                   <Progress
-                     value={progressValues.completion}
+                     value={progressValues.completion || 0}
                      className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -188,7 +199,8 @@ export function PlatformImpactStats() {
         </TabsContent>
 
         {/* Efficiency & Satisfaction Tab Content */}
-        <TabsContent value="efficiency" className="space-y-6 md:space-y-0">
+         {/* Use motion.div if you want tab content to animate */}
+        <TabsContent value="efficiency" className="space-y-6 md:space-y-0 data-[state=inactive]:hidden"> {/* Add data-[state=inactive]:hidden */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 4: Teacher Time Saved */}
             <Card className={`${cardBaseClasses} ${gradientBackground}`}>
@@ -198,11 +210,12 @@ export function PlatformImpactStats() {
                   <Zap className={iconClasses} />
                 </div>
                 <div className={contentClasses}>
+                  {/* Use the formatter */}
                   <div className={numberClasses}>{formatPercentage(timeSavedCount)}</div>
                   {/* Updated Label for clarity */}
                   <div className={labelClasses}>Est. Teacher Time Saved</div>
                   <Progress
-                    value={progressValues.timeSaved}
+                    value={progressValues.timeSaved || 0}
                     className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -217,11 +230,12 @@ export function PlatformImpactStats() {
                   <Award className={iconClasses} />
                 </div>
                 <div className={contentClasses}>
+                   {/* Use the formatter */}
                   <div className={numberClasses}>{formatRating(satisfactionRawCount)}/5</div>
                   {/* Updated Label */}
                   <div className={labelClasses}>Overall User Satisfaction</div>
                   <Progress
-                     value={progressValues.satisfaction} // Use calculated percentage
+                     value={progressValues.satisfaction || 0} // Use calculated percentage with fallback
                      className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -236,11 +250,12 @@ export function PlatformImpactStats() {
                   <Star className={iconClasses} />
                 </div>
                 <div className={contentClasses}>
+                   {/* Use the formatter */}
                   <div className={numberClasses}>{formatRating(easeOfUseRawCount)}/5</div>
                   {/* Updated Label */}
                   <div className={labelClasses}>Teacher Ease of Use</div>
                   <Progress
-                     value={progressValues.easeOfUse} // Use calculated percentage
+                     value={progressValues.easeOfUse || 0} // Use calculated percentage with fallback
                      className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
