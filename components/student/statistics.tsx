@@ -7,15 +7,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Trophy, Users, Clock, BookOpen, GraduationCap, Award } from 'lucide-react';
 
 // Animated counter hook (modified slightly for clarity)
-const useCounter = (end, duration = 1500) => { // Default duration 1.5s
+const useCounter = (end:number, duration = 1500) => { // Default duration 1.5s
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    let startTime;
-    let animationFrame;
+    let startTime:number;
+    let animationFrame:number;
     const startValue = 0;
 
-    const step = (timestamp) => {
+    const step = (timestamp:number) => {
       if (!startTime) startTime = timestamp;
       const timeElapsed = timestamp - startTime;
       const progress = Math.min(timeElapsed / duration, 1);
@@ -107,13 +107,13 @@ export function StudentStatistics() {
   const satisfactionRawCount = useCounter(activeTab ? targetValues.satisfaction * 0.5 : 0); // Animate 0 to 48
 
   // Formatters for display
-  const formatSatisfaction = (rawCount) => {
+  const formatSatisfaction = (rawCount:number) => {
     // Animate towards 48, display as N.N/5
     return (rawCount / 10).toFixed(1);
   }
 
    // Helper to format large numbers with K+
-   const formatKPlus = (num) => {
+   const formatKPlus = (num:number) => {
      if (num < 1000) return num; // Don't format if less than 1000 during animation
      return (num / 1000).toFixed(0) + 'K+'; // Show K+ once it hits 1000+
    };
@@ -154,7 +154,7 @@ export function StudentStatistics() {
                   <div className={numberClasses}>{passRateCount}%</div>
                   <div className={labelClasses}>Pass Rate</div>
                   <Progress
-                    value={progressValues.passRate}
+                    value={progressValues.passRate || 0}
                     className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -172,7 +172,7 @@ export function StudentStatistics() {
                   <div className={numberClasses}>{formatKPlus(activeUsersCount)}</div>
                   <div className={labelClasses}>Active Learners</div>
                   <Progress
-                     value={progressValues.activeUsers}
+                     value={progressValues.activeUsers || 0}
                      className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -189,7 +189,7 @@ export function StudentStatistics() {
                   <div className={numberClasses}>24/7</div>
                   <div className={labelClasses}>Study Support</div>
                   <Progress
-                     value={progressValues.support} // Always 100
+                     value={progressValues.support || 0} // Always 100
                      className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -211,7 +211,7 @@ export function StudentStatistics() {
                   <div className={numberClasses}>{coursesCount}+</div>
                   <div className={labelClasses}>Available Courses</div>
                   <Progress
-                    value={progressValues.courses}
+                    value={progressValues.courses || 0}
                     className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -229,7 +229,7 @@ export function StudentStatistics() {
                   <div className={numberClasses}>{formatKPlus(graduatesCount)}</div>
                   <div className={labelClasses}>Graduated Students</div>
                   <Progress
-                     value={progressValues.graduates}
+                     value={progressValues.graduates || 0}
                      className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>
@@ -247,7 +247,7 @@ export function StudentStatistics() {
                   <div className={numberClasses}>{formatSatisfaction(satisfactionRawCount)}/5</div>
                   <div className={labelClasses}>Satisfaction Rate</div>
                   <Progress
-                     value={progressValues.satisfaction}
+                     value={progressValues.satisfaction || 0}
                      className={`${progressClasses} ${progressIndicatorClasses}`}
                   />
                 </div>

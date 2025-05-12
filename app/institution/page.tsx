@@ -13,7 +13,6 @@ import { InstitutionSection } from "@/components/sections/institution-section";
 
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { ChatModal } from "@/components/chat-modal";
-import { StudentStatistics } from "@/components/student/statistics";
 
 const containerVariants = {
   hidden: { opacity: 0 },
