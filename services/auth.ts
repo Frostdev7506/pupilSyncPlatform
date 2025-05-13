@@ -111,6 +111,35 @@ class AuthService {
     }
   }
 
+  async login(email: string, password: string): Promise<AuthResponse> {
+    try {
+      const response = await apiClient.post<AuthResponse>('/auth/login', {
+        email,
+        password
+      });
+      
+      const result = response.data;
+      this.setToken(result.token);
+      return result;
+    } catch (error) {
+      let errorMessage = 'Failed to login';
+
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ message?: string }>;
+        if (axiosError.response?.data?.message) {
+          errorMessage = axiosError.response.data.message;
+        } else if (axiosError.message) {
+          errorMessage = axiosError.message;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      console.error("Login Error:", error);
+      throw new Error(errorMessage);
+    }
+  }
+
   private setToken(token: string) {
     if (typeof window !== 'undefined') {
       localStorage.setItem('token', token);
@@ -150,6 +179,22 @@ export const useRegisterInstitution = () => {
     onError: (error) => {
       // Optional: Add specific UI feedback for errors here if needed
       console.error("Mutation Error:", error.message);
+    }
+  });
+};
+
+export const useLogin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<AuthResponse, Error, { email: string; password: string }>({
+    mutationFn: (credentials) => authService.login(credentials.email, credentials.password),
+    onSuccess: (data) => {
+      queryClient.setQueryData(['auth'], data);
+      // Optional: You might want to invalidate other queries upon successful login
+      // queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+    },
+    onError: (error) => {
+      console.error("Login Error:", error.message);
     }
   });
 };
