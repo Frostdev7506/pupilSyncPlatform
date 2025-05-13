@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,16 +21,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Github, Mail, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { useLogin } from "@/services/auth";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
-  entityType: z.enum(["teacher", "student", "institute"], {
-    required_error: "Please select your role",
-  }),
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter"),
   rememberMe: z.boolean().default(false),
 });
 
@@ -58,41 +55,59 @@ const itemVariants = {
 
 export default function LoginPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { mutate: login, isPending: isLoading } = useLogin();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
-      entityType: undefined,
       rememberMe: false,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      setIsLoading(true);
-      // Implement your login logic here
-      console.log(values);
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
-      toast({
-        title: "Success",
-        description: "You have successfully logged in.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    login(
+      {
+        email: values.email,
+        password: values.password,
+      },
+      {
+        onSuccess: (data) => {
+          toast({
+            title: "Success",
+            description: "You have successfully logged in.",
+          });
+
+          // Redirect based on role from response
+          switch (data.data.user.role) {
+            case 'student':
+              router.push('/student/dashboard');
+              break;
+            case 'teacher':
+              router.push('/teacher/dashboard');
+              break;
+            case 'institution':
+              router.push('/institution/dashboard');
+              break;
+            default:
+              router.push('/');
+          }
+        },
+        onError: (error) => {
+          toast({
+            title: "Error",
+            description: error.message || "Invalid credentials. Please try again.",
+            variant: "destructive",
+          });
+        },
+      }
+    );
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-1 md:py-10 bg-gradient-to-b from-background to-muted/20">
+    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-1 md:py-10">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -112,27 +127,6 @@ export default function LoginPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <motion.div variants={itemVariants} className="space-y-2">
-                <Label htmlFor="entityType">I am a</Label>
-                <select
-                  id="entityType"
-                  {...form.register("entityType")}
-                  className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-                    form.formState.errors.entityType ? "border-red-500" : ""
-                  }`}
-                >
-                  <option value="">Select your role</option>
-                  <option value="teacher">Teacher</option>
-                  <option value="student">Student</option>
-                  <option value="institute">Institute</option>
-                </select>
-                {form.formState.errors.entityType && (
-                  <p className="text-sm text-red-500 mt-1">
-                    {form.formState.errors.entityType.message}
-                  </p>
-                )}
-              </motion.div>
-              
               <motion.div variants={itemVariants} className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
