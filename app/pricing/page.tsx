@@ -19,6 +19,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Check, HelpCircle } from "lucide-react";
+import { getPricingAndFaqData } from "./data/pricingAndFaqData";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -38,100 +39,10 @@ const itemVariants = {
   },
 };
 
-const pricingPlans = [
-  {
-    name: "Basic",
-    price: {
-      monthly: 29,
-      annual: 24,
-    },
-    description: "Perfect for individuals and small teams",
-    features: [
-      "Up to 100 students",
-      "Basic analytics",
-      "5GB storage",
-      "Email support",
-      "Basic course creation tools",
-      "Student progress tracking",
-      "Mobile app access",
-      "Basic integrations",
-    ],
-  },
-  {
-    name: "Pro",
-    price: {
-      monthly: 79,
-      annual: 69,
-    },
-    description: "Ideal for growing organizations",
-    features: [
-      "Up to 1,000 students",
-      "Advanced analytics",
-      "50GB storage",
-      "Priority email & chat support",
-      "Advanced course creation tools",
-      "Custom branding",
-      "API access",
-      "Advanced integrations",
-      "Multiple admin accounts",
-      "Automated workflows",
-    ],
-    recommended: true,
-  },
-  {
-    name: "Enterprise",
-    price: {
-      monthly: 199,
-      annual: 179,
-    },
-    description: "For large institutions and corporations",
-    features: [
-      "Unlimited students",
-      "Custom analytics",
-      "Unlimited storage",
-      "24/7 dedicated support",
-      "Custom development",
-      "White-labeling",
-      "Custom integrations",
-      "Single sign-on (SSO)",
-      "Advanced security features",
-      "Custom reporting",
-      "SLA guarantee",
-      "Onboarding manager",
-    ],
-  },
-];
-
-const faqs = [
-  {
-    question: "What payment methods do you accept?",
-    answer:
-      "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for annual plans.",
-  },
-  {
-    question: "Can I switch plans later?",
-    answer:
-      "Yes, you can upgrade or downgrade your plan at any time. The price difference will be prorated.",
-  },
-  {
-    question: "Is there a free trial available?",
-    answer:
-      "Yes, we offer a 14-day free trial for all plans. No credit card required.",
-  },
-  {
-    question: "What happens when I exceed my student limit?",
-    answer:
-      "We'll notify you when you're approaching your limit. You can upgrade to a higher plan or contact us for a custom solution.",
-  },
-  {
-    question: "Do you offer discounts for educational institutions?",
-    answer:
-      "Yes, we offer special pricing for educational institutions. Please contact our sales team for more information.",
-  },
-];
-
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = React.useState(false);
+
+  const { pricingPlans, faqs } = getPricingAndFaqData("institution");
 
   return (
     <div className="min-h-screen bg-background py-20">

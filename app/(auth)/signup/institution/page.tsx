@@ -23,23 +23,29 @@ import { authService } from "@/services/auth";
 import { useRouter } from "next/navigation";
 
 // Zod schema remains the same
-const formSchema = z.object({
-  name: z.string().min(2, "Institution name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  firstName: z.string().min(2, "First name is required"),
-  lastName: z.string().min(2, "Last name is required"),
-  contactEmail: z.string().email("Invalid contact email"),
-  address: z.string().min(5, "Address is required"), // Added address back if needed
-  password: z.string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"], // Make sure error attaches to confirmPassword field
-});
+const formSchema = z
+  .object({
+    name: z.string().min(2, "Institution name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    firstName: z.string().min(2, "First name is required"),
+    lastName: z.string().min(2, "Last name is required"),
+    contactEmail: z.string().email("Invalid contact email"),
+    address: z.string().min(5, "Address is required"), // Added address back if needed
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/[0-9]/, "Password must contain at least one number")
+      .regex(
+        /[^A-Za-z0-9]/,
+        "Password must contain at least one special character"
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"], // Make sure error attaches to confirmPassword field
+  });
 
 // Animation variants remain the same
 const containerVariants = {
@@ -88,19 +94,16 @@ export default function InstitutionSignUpPage() {
         password: values.password,
       });
 
-      if (response.status === 'success' && response.token) {
+      if (response.status === "success" && response.token) {
         toast({
           title: "Success",
-          description: "Your institution account has been created successfully.",
+          description:
+            "Your institution account has been created successfully.",
         });
 
-        // Token is automatically stored by authService
-        // Redirect to dashboard
-        router.push('instituiton/dashboard');
-        // router.push('/login');
-
+        router.push("/institution/dashboard");
       } else {
-        throw new Error('Invalid response from server');
+        throw new Error("Invalid response from server");
       }
     } catch (error: any) {
       toast({
@@ -123,14 +126,16 @@ export default function InstitutionSignUpPage() {
       transition duration-150 ease-in-out
     `; // Removed focus:ring-offset-background as bg is dark
     const focusClasses = form.formState.errors[fieldName]
-      ? 'focus:ring-red-500 focus:border-red-500' // Focus state when error
-      : 'focus:ring-blue-500 focus:border-blue-500'; // Normal focus state
-    const errorClasses = form.formState.errors[fieldName] ? 'border-red-500' : 'border-gray-600';
+      ? "focus:ring-red-500 focus:border-red-500" // Focus state when error
+      : "focus:ring-blue-500 focus:border-blue-500"; // Normal focus state
+    const errorClasses = form.formState.errors[fieldName]
+      ? "border-red-500"
+      : "border-gray-600";
 
     return `${baseClasses} ${errorClasses} ${focusClasses}`;
   };
-   // Helper function for Textarea classes
-   const getTextareaClasses = (fieldName: keyof z.infer<typeof formSchema>) => {
+  // Helper function for Textarea classes
+  const getTextareaClasses = (fieldName: keyof z.infer<typeof formSchema>) => {
     const baseClasses = `
         mt-1 block w-full px-3 py-2 rounded-md
         bg-gray-800 border border-gray-600
@@ -138,12 +143,14 @@ export default function InstitutionSignUpPage() {
         focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-offset-transparent
         transition duration-150 ease-in-out resize-none
       `; // Added resize-none
-      const focusClasses = form.formState.errors[fieldName]
-      ? 'focus:ring-red-500 focus:border-red-500' // Focus state when error
-      : 'focus:ring-blue-500 focus:border-blue-500'; // Normal focus state
-      const errorClasses = form.formState.errors[fieldName] ? 'border-red-500' : 'border-gray-600';
+    const focusClasses = form.formState.errors[fieldName]
+      ? "focus:ring-red-500 focus:border-red-500" // Focus state when error
+      : "focus:ring-blue-500 focus:border-blue-500"; // Normal focus state
+    const errorClasses = form.formState.errors[fieldName]
+      ? "border-red-500"
+      : "border-gray-600";
 
-      return `${baseClasses} ${errorClasses} ${focusClasses}`;
+    return `${baseClasses} ${errorClasses} ${focusClasses}`;
   };
 
   return (
@@ -157,9 +164,10 @@ export default function InstitutionSignUpPage() {
       >
         {/* --- Dark Card --- */}
         <Card className="bg-gray-900/80 backdrop-blur-sm border border-gray-700/50 shadow-xl rounded-xl text-gray-200">
-
           {/* --- Card Header --- */}
-          <CardHeader className="pt-8 pb-4 px-6 md:px-8 relative"> {/* Added relative positioning */}
+          <CardHeader className="pt-8 pb-4 px-6 md:px-8 relative">
+            {" "}
+            {/* Added relative positioning */}
             {/* Back Button - Positioned absolutely */}
             <Link
               href="/signup" // Link back to role selection
@@ -189,7 +197,12 @@ export default function InstitutionSignUpPage() {
 
               {/* Institution Name */}
               <motion.div variants={itemVariants}>
-                <Label htmlFor="name" className="text-sm font-medium text-gray-300">Institution Name</Label>
+                <Label
+                  htmlFor="name"
+                  className="text-sm font-medium text-gray-300"
+                >
+                  Institution Name
+                </Label>
                 <Input
                   id="name"
                   type="text"
@@ -207,14 +220,19 @@ export default function InstitutionSignUpPage() {
 
               {/* Institution Email */}
               <motion.div variants={itemVariants}>
-                <Label htmlFor="email" className="text-sm font-medium text-gray-300">Institution Email</Label>
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-medium text-gray-300"
+                >
+                  Institution Email
+                </Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="Enter institution email"
                   {...form.register("email")}
                   className={getInputClasses("email")}
-                   aria-invalid={form.formState.errors.email ? "true" : "false"}
+                  aria-invalid={form.formState.errors.email ? "true" : "false"}
                 />
                 {form.formState.errors.email && (
                   <p className="mt-1.5 text-xs text-red-400">
@@ -225,14 +243,21 @@ export default function InstitutionSignUpPage() {
 
               {/* First Name */}
               <motion.div variants={itemVariants}>
-                <Label htmlFor="firstName" className="text-sm font-medium text-gray-300">First Name</Label>
+                <Label
+                  htmlFor="firstName"
+                  className="text-sm font-medium text-gray-300"
+                >
+                  First Name
+                </Label>
                 <Input
                   id="firstName"
                   type="text"
                   placeholder="Enter first name"
                   {...form.register("firstName")}
                   className={getInputClasses("firstName")}
-                   aria-invalid={form.formState.errors.firstName ? "true" : "false"}
+                  aria-invalid={
+                    form.formState.errors.firstName ? "true" : "false"
+                  }
                 />
                 {form.formState.errors.firstName && (
                   <p className="mt-1.5 text-xs text-red-400">
@@ -243,14 +268,21 @@ export default function InstitutionSignUpPage() {
 
               {/* Last Name */}
               <motion.div variants={itemVariants}>
-                <Label htmlFor="lastName" className="text-sm font-medium text-gray-300">Last Name</Label>
+                <Label
+                  htmlFor="lastName"
+                  className="text-sm font-medium text-gray-300"
+                >
+                  Last Name
+                </Label>
                 <Input
                   id="lastName"
                   type="text"
                   placeholder="Enter last name"
                   {...form.register("lastName")}
                   className={getInputClasses("lastName")}
-                   aria-invalid={form.formState.errors.lastName ? "true" : "false"}
+                  aria-invalid={
+                    form.formState.errors.lastName ? "true" : "false"
+                  }
                 />
                 {form.formState.errors.lastName && (
                   <p className="mt-1.5 text-xs text-red-400">
@@ -261,14 +293,21 @@ export default function InstitutionSignUpPage() {
 
               {/* Contact Email */}
               <motion.div variants={itemVariants}>
-                <Label htmlFor="contactEmail" className="text-sm font-medium text-gray-300">Contact Email</Label>
+                <Label
+                  htmlFor="contactEmail"
+                  className="text-sm font-medium text-gray-300"
+                >
+                  Contact Email
+                </Label>
                 <Input
                   id="contactEmail"
                   type="email"
                   placeholder="Enter contact email"
                   {...form.register("contactEmail")}
                   className={getInputClasses("contactEmail")}
-                   aria-invalid={form.formState.errors.contactEmail ? "true" : "false"}
+                  aria-invalid={
+                    form.formState.errors.contactEmail ? "true" : "false"
+                  }
                 />
                 {form.formState.errors.contactEmail && (
                   <p className="mt-1.5 text-xs text-red-400">
@@ -278,15 +317,22 @@ export default function InstitutionSignUpPage() {
               </motion.div>
 
               {/* Address */}
-               <motion.div variants={itemVariants}>
-                <Label htmlFor="address" className="text-sm font-medium text-gray-300">Address</Label>
+              <motion.div variants={itemVariants}>
+                <Label
+                  htmlFor="address"
+                  className="text-sm font-medium text-gray-300"
+                >
+                  Address
+                </Label>
                 <textarea
                   id="address"
                   rows={3}
                   placeholder="Enter institution address"
                   {...form.register("address")}
                   className={getTextareaClasses("address")}
-                   aria-invalid={form.formState.errors.address ? "true" : "false"}
+                  aria-invalid={
+                    form.formState.errors.address ? "true" : "false"
+                  }
                 />
                 {form.formState.errors.address && (
                   <p className="mt-1.5 text-xs text-red-400">
@@ -297,14 +343,21 @@ export default function InstitutionSignUpPage() {
 
               {/* Password */}
               <motion.div variants={itemVariants}>
-                <Label htmlFor="password" className="text-sm font-medium text-gray-300">Password</Label>
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-300"
+                >
+                  Password
+                </Label>
                 <Input
                   id="password"
                   type="password"
                   placeholder="Create a password"
                   {...form.register("password")}
                   className={getInputClasses("password")}
-                   aria-invalid={form.formState.errors.password ? "true" : "false"}
+                  aria-invalid={
+                    form.formState.errors.password ? "true" : "false"
+                  }
                 />
                 {form.formState.errors.password && (
                   <p className="mt-1.5 text-xs text-red-400">
@@ -315,14 +368,21 @@ export default function InstitutionSignUpPage() {
 
               {/* Confirm Password */}
               <motion.div variants={itemVariants}>
-                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-300">Confirm Password</Label>
+                <Label
+                  htmlFor="confirmPassword"
+                  className="text-sm font-medium text-gray-300"
+                >
+                  Confirm Password
+                </Label>
                 <Input
                   id="confirmPassword"
                   type="password"
                   placeholder="Confirm your password"
                   {...form.register("confirmPassword")}
                   className={getInputClasses("confirmPassword")}
-                   aria-invalid={form.formState.errors.confirmPassword ? "true" : "false"}
+                  aria-invalid={
+                    form.formState.errors.confirmPassword ? "true" : "false"
+                  }
                 />
                 {form.formState.errors.confirmPassword && (
                   <p className="mt-1.5 text-xs text-red-400">
@@ -343,7 +403,9 @@ export default function InstitutionSignUpPage() {
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Creating Account...
                     </div>
-                  ) : "Create Account"}
+                  ) : (
+                    "Create Account"
+                  )}
                 </Button>
               </motion.div>
             </form>
@@ -353,7 +415,10 @@ export default function InstitutionSignUpPage() {
           <CardFooter className="flex justify-center pt-2 pb-8 px-6 md:px-8">
             <p className="text-sm text-gray-400">
               Already have an account?{" "}
-              <Link href="/login" className="font-medium text-blue-400 hover:text-blue-300 hover:underline">
+              <Link
+                href="/login"
+                className="font-medium text-blue-400 hover:text-blue-300 hover:underline"
+              >
                 Sign in
               </Link>
             </p>

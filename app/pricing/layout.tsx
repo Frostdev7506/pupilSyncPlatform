@@ -16,7 +16,7 @@ export default function PricingLayout({
       <div className="container mx-auto px-4 py-20">
         <div className="text-center">
           <h1 className="text-6xl font-bold mb-4 max-sm:text-4xl max-[375px]:text-3xl">
-            Simple, transparent pricing
+            Simple Transparent Pricing
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-sm:text-lg">
             Choose the perfect plan for your needs
