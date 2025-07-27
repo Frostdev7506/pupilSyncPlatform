@@ -1,3 +1,4 @@
+import { pricingService } from "@/services/pricing";
 export interface PricingPlan {
   name: string;
   price: {
@@ -259,3 +260,28 @@ export function getPricingAndFaqData(
       throw new Error(`Unsupported entity type: ${entityType}`);
   }
 }
+
+export async function fetchPricingData(
+  entityType: "institution" | "student" | "teacher"
+): Promise<EntityPricingData> {
+  try {
+    const data = await pricingService.getPricingData(entityType);
+    return {
+      entityType,
+      pricingPlans: [],
+      faqs: data.faqs,
+    };
+  } catch (error) {
+    console.error(`Error fetching pricing data for ${entityType}:`, error);
+    // Return empty data structure in case of error
+    return {
+      entityType,
+      pricingPlans: [],
+      faqs: [],
+    };
+  }
+}
+
+fetchPricingData("institution").then((data) => {
+  console.log(data);
+});

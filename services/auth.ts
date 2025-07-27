@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios'; // Import axios and AxiosError
-// import { cookies } from 'next/headers'; // This import is not used here, usually for Server Components/Route Handlers
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "./http-client";
+import axios, { AxiosError } from "axios";
 
 // --- Interfaces remain the same ---
 export interface AuthResponse {
@@ -43,31 +43,28 @@ export interface TeacherRegistrationData {
 }
 
 // Create an axios instance (recommended for base URL and default config)
-const apiClient = axios.create({
-  baseURL: 'http://localhost:5000/api/v1', // Set the base URL here
-  withCredentials: true, // Equivalent to fetch's 'credentials: include'
-  headers: {
-    'Content-Type': 'application/json', // Default Content-Type
-  },
-});
 
 class AuthService {
   // No need for API_URL property if using axios instance baseURL
 
-  async registerInstitution(data: InstitutionRegistrationData): Promise<AuthResponse> {
+  async registerInstitution(
+    data: InstitutionRegistrationData
+  ): Promise<AuthResponse> {
     try {
       // Use the apiClient instance
       // axios automatically stringifies the data object for JSON requests
-      const response = await apiClient.post<AuthResponse>('/auth/register-institution', data);
+      const response = await apiClient.post<AuthResponse>(
+        "/auth/register-institution",
+        data
+      );
 
       // axios resolves promises for 2xx status codes, data is in response.data
       const result = response.data;
       this.setToken(result.token);
       return result;
-
     } catch (error) {
       // axios throws an error for non-2xx status codes
-      let errorMessage = 'Failed to register institution';
+      let errorMessage = "Failed to register institution";
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<{ message?: string }>; // Type assertion for better error data access
@@ -88,12 +85,15 @@ class AuthService {
 
   async registerTeacher(data: TeacherRegistrationData): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/register-teacher', data);
+      const response = await apiClient.post<AuthResponse>(
+        "/auth/register-teacher",
+        data
+      );
       const result = response.data;
       this.setToken(result.token);
       return result;
     } catch (error) {
-      let errorMessage = 'Failed to register teacher';
+      let errorMessage = "Failed to register teacher";
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<{ message?: string }>;
@@ -113,16 +113,16 @@ class AuthService {
 
   async login(email: string, password: string): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/login', {
+      const response = await apiClient.post<AuthResponse>("/auth/login", {
         email,
-        password
+        password,
       });
-      
+
       const result = response.data;
       this.setToken(result.token);
       return result;
     } catch (error) {
-      let errorMessage = 'Failed to login';
+      let errorMessage = "Failed to login";
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<{ message?: string }>;
@@ -141,8 +141,8 @@ class AuthService {
   }
 
   private setToken(token: string) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', token);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("token", token);
     } else {
       // Handle server-side or environment where localStorage is not available
       // console.warn("localStorage is not available. Token not set.");
@@ -150,15 +150,15 @@ class AuthService {
   }
 
   getToken(): string | null {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('token');
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("token");
     }
     return null;
   }
 
   clearToken() {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('token');
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
     }
   }
 }
@@ -172,14 +172,14 @@ export const useRegisterInstitution = () => {
   return useMutation<AuthResponse, Error, InstitutionRegistrationData>({
     mutationFn: (data) => authService.registerInstitution(data),
     onSuccess: (data) => {
-      queryClient.setQueryData(['auth'], data);
+      queryClient.setQueryData(["auth"], data);
       // Optional: You might want to invalidate other queries upon successful registration/login
       // queryClient.invalidateQueries({ queryKey: ['userProfile'] });
     },
     onError: (error) => {
       // Optional: Add specific UI feedback for errors here if needed
       console.error("Mutation Error:", error.message);
-    }
+    },
   });
 };
 
@@ -187,14 +187,15 @@ export const useLogin = () => {
   const queryClient = useQueryClient();
 
   return useMutation<AuthResponse, Error, { email: string; password: string }>({
-    mutationFn: (credentials) => authService.login(credentials.email, credentials.password),
+    mutationFn: (credentials) =>
+      authService.login(credentials.email, credentials.password),
     onSuccess: (data) => {
-      queryClient.setQueryData(['auth'], data);
+      queryClient.setQueryData(["auth"], data);
       // Optional: You might want to invalidate other queries upon successful login
       // queryClient.invalidateQueries({ queryKey: ['userProfile'] });
     },
     onError: (error) => {
       console.error("Login Error:", error.message);
-    }
+    },
   });
 };
